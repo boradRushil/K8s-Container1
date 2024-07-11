@@ -54,7 +54,7 @@ app.post('/calculate', async (req, res) => {
     }
 
     const filePath = path.join(PERSISTENT_VOLUME_PATH, file);
-    console.log("File path for calculation:", filePath);
+    console.log("File path for calculation", filePath);
     if (!fs.existsSync(filePath)) {
         console.error("File not found:", filePath);
         return res.json({ file, error: 'File not found.' });
