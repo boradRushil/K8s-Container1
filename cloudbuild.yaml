@@ -8,6 +8,11 @@ steps:
     args:
       [
         'docker build -t us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube .'
+      ]
+
+  - name: Build and push Container1 image
+    args:
+      [
         'docker push us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube'
       ]
     # - name: Build and push Container2 image
