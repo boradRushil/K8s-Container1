@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    steps:
+     - name: Build and push Container1 image
+      run: |
+        docker build -t us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube .
+        docker push us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube
+
+    # - name: Build and push Container2 image
+    #   run: |
+    #     docker build -t ghcr.io/${{ github.repository }}/container2:latest ./container2
+    #     docker push ghcr.io/${{ github.repository }}/container2:latest
+
+    # - name: Set up Google Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@v1
+    #   with:
+    #     service_account_key: ${{ secrets.GCP_SA_KEY }}
+    #     project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    # - name: Authenticate to GKE
+    #   run: |
+    #     gcloud container clusters get-credentials <your-cluster-name> --region <your-region>
+
+    # - name: Apply Kubernetes manifests
+    #   run: |
+    #     kubectl apply -f deploymentC1.yaml
+    #     kubectl apply -f deploymentC2.yaml
+    #     kubectl apply -f persistent-volume.yaml
