@@ -8,8 +8,7 @@ const PORT = 6000;
 const app = express();
 app.use(express.json());
 
-// const PERSISTENT_VOLUME_PATH = path.resolve(__dirname, '../data'); // Define the persistent volume path
-const PERSISTENT_VOLUME_PATH = '/rushil_PV_dir';
+const PERSISTENT_VOLUME_PATH = '/rushil_PV_dir'; // Define the persistent volume path
 
 // Ensure the directory exists
 if (!fs.existsSync(PERSISTENT_VOLUME_PATH)) {
