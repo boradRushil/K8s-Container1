@@ -2,30 +2,43 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-    [
-      'build','-t','us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube','-f','Dockerfile', '.'
-    ]
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube']
-    # - name: Build and push Container2 image
-    #   run: |
-    #     docker build -t ghcr.io/${{ github.repository }}/container2:latest ./container2
-    #     docker push ghcr.io/${{ github.repository }}/container2:latest
+  # Step 1: Build Docker image for container1
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Step 1: Building Docker image for container1..."
+        docker build -t us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube -f Dockerfile .
+        echo "Docker image for container1 built successfully."
 
-    # - name: Set up Google Cloud SDK
-    #   uses: google-github-actions/setup-gcloud@v1
-    #   with:
-    #     service_account_key: ${{ secrets.GCP_SA_KEY }}
-    #     project_id: ${{ secrets.GCP_PROJECT_ID }}
+  # Step 2: Push Docker image for container1
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Step 2: Pushing Docker image for container1..."
+        docker push us-central1-docker.pkg.dev/adv-cloud-k8s/k8s/rborad/container1:Kube
+        echo "Docker image for container1 pushed successfully."
 
-    # - name: Authenticate to GKE
-    #   run: |
-    #     gcloud container clusters get-credentials <your-cluster-name> --region <your-region>
+  # Step 3: Authenticate to GKE
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Step 3: Authenticating to GKE..."
+        gcloud container clusters get-credentials k8s-cluster --region us-central1-c --project adv-cloud-k8s
+        echo "Authenticated to GKE successfully."
 
-    # - name: Apply Kubernetes manifests
-    #   run: |
-    #     kubectl apply -f deploymentC1.yaml
-    #     kubectl apply -f deploymentC2.yaml
-    #     kubectl apply -f persistent-volume.yaml
+  # Step 4: Apply Kubernetes manifests
+  - name: 'gcr.io/cloud-builders/kubectl'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Step 4: Applying Kubernetes manifests..."
+        kubectl apply -f persistent-volume.yaml
+        kubectl apply -f deploymentC1.yaml
+        echo "Kubernetes manifests applied successfully."
