@@ -61,8 +61,9 @@ app.post('/calculate', async (req, res) => {
 
     try {
         console.log("Sending request to Container 2...");
+        // const response = await axios.post('http://localhost:2000/calculate', { file, product });
         const response = await axios.post('http://container2-service:90/calculate', { file, product });
-        console.log("Received response from Container 2", response.data);
+        console.log("Received response from Container 2:", response.data);
 
         return res.json(response.data); // Return the response from container 2
     } catch (error) {
